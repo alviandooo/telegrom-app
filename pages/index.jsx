@@ -25,22 +25,44 @@ import EmoticonIcons from "@mui/icons-material/EmojiEmotions";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MicIcon from "@mui/icons-material/Mic";
 import SendIcon from "@mui/icons-material/Send";
-import { ref, onValue } from "firebase/database";
-import { database } from "@/database/firebase";
+import * as useDb from "@/utils/database";
 
 // const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [isClicked, setIsClicked] = React.useState(false);
   const [selectedChat, setSelectedChat] = React.useState(null);
+  const [message, setMessage] = React.useState("");
+  const [messages, setMessages] = React.useState([]);
+
   React.useEffect(() => {
-    const db = database;
-    const starCountRef = ref(db, "users");
-    onValue(starCountRef, (snapshot) => {
+    useDb.getData("messages/user_1", (snapshot) => {
       const data = snapshot.val();
-      console.log(data);
+      setMessages(data);
     });
-  });
+  }, []);
+
+  console.log(messages);
+
+  const sendMessages = () => {
+    const date = `${new Date().getFullYear()} ${
+      new Date().getMonth() + 1
+    } ${new Date().getDate()}`;
+
+    useDb.postData("messages", {
+      ["user_1"]: {
+        ...messages,
+        [new Date().getTime()]: {
+          receiver_id: "user_receiver_2",
+          message,
+          timestamp: {
+            date: date,
+            time: new Date().getTime(),
+          },
+        },
+      },
+    });
+  };
   return (
     <>
       <Head>
@@ -352,7 +374,10 @@ export default function Home() {
                     placeholder="Type your message..."
                     multiline
                     maxRows={2}
-                    sx={{ width: "100%" }}
+                    fullWidth
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                    }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -385,7 +410,14 @@ export default function Home() {
                             }}
                           />
                           <SendIcon
+                            onClick={sendMessages}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                sendMessages();
+                              }
+                            }}
                             sx={{
+                              cursor: "pointer",
                               color: "#7E98DF",
                               mx: 1,
                             }}
@@ -397,19 +429,6 @@ export default function Home() {
                 </Box>
               </React.Fragment>
             )}
-
-            {/* <Box className="bg-white p-3 w-100">
-              <TextField
-                id="outlined-multiline-flexible"
-                placeholder="Type your message..."
-                multiline
-                fullWidth
-                maxRows={2}
-                sx={{
-                  backgroundColor: "#FAFAFA",
-                }}
-              />
-            </Box> */}
           </Grid>
         </Grid>
       </main>

@@ -11,7 +11,28 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 
+import { auth } from "@/utils/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 function index() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const manualLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+      });
+  };
+
   return (
     <Card variant="outlined" className={`${styles.cardLogin}`}>
       <Container>
@@ -33,6 +54,7 @@ function index() {
           sx={{
             fontSize: "10px",
           }}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <TextField
@@ -47,13 +69,19 @@ function index() {
             fontSize: "10px",
             marginTop: "20px",
           }}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <Button className={`${styles.btnForgotPassword}`}>
           Forgot password?
         </Button>
 
-        <Button className={`${styles.btnLogin}`} size="large" fullWidth>
+        <Button
+          className={`${styles.btnLogin}`}
+          size="large"
+          fullWidth
+          onClick={manualLogin}
+        >
           <b>Login</b>
         </Button>
 
