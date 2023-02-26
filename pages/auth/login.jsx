@@ -8,7 +8,7 @@ function login() {
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <title>Login</title>
+        <title>Login | Telegrom</title>
       </Head>
       <main>
         <Grid

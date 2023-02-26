@@ -9,13 +9,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
 
 function index() {
   return (
-    <Card variant="outlined" className={`${styles.cardLogin}`}>
+    <Card variant="outlined" className={`${styles.cardRegister}`}>
       <Container>
         <Typography variant="h1" className={`${styles.title}`}>
-          LOGIN
+          Register
         </Typography>
 
         <Typography className={`${styles.subTitle}`} paragraph={true}>
@@ -25,11 +26,24 @@ function index() {
         <TextField
           required
           id="standard-required"
+          label="Name"
+          defaultValue=""
+          variant="standard"
+          fullWidth
+          sx={{
+            fontSize: "10px",
+          }}
+        />
+
+        <TextField
+          required
+          id="standard-required"
           label="Email"
           defaultValue=""
           variant="standard"
           fullWidth
           sx={{
+            marginTop: "20px",
             fontSize: "10px",
           }}
         />
@@ -48,12 +62,8 @@ function index() {
           }}
         />
 
-        <Button className={`${styles.btnForgotPassword}`}>
-          Forgot password?
-        </Button>
-
-        <Button className={`${styles.btnLogin}`} size="large" fullWidth>
-          <b>Login</b>
+        <Button className={`${styles.btnRegister}`} size="large" fullWidth>
+          <b>Register</b>
         </Button>
 
         <Divider
@@ -68,7 +78,7 @@ function index() {
               color: "#848484",
             }}
           >
-            Login with
+            Register with
           </Typography>
         </Divider>
 
@@ -76,7 +86,7 @@ function index() {
           size="large"
           fullWidth
           variant="outlined"
-          className={`${styles.btnLoginGoogle}`}
+          className={`${styles.btnRegisterGoogle}`}
         >
           <GoogleIcon
             sx={{
@@ -93,9 +103,11 @@ function index() {
           }}
         >
           <Typography>
-            Don’t have an account?
+            Already have an account?
             <Button className={`${styles.btnPrimary}`}>
-              <b>Sign Up</b>
+              <Link href="/auth/login">
+                <b>Sign In</b>
+              </Link>
             </Button>
           </Typography>
         </Container>

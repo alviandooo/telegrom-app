@@ -1,6 +1,6 @@
 @import "../../../styles/global.module.scss";
 
-.cardLogin {
+.cardRegister {
     border-radius: 30px;
     height: 68vh;
     padding: 30px;
@@ -21,7 +21,7 @@
         color: #232323;
     }
 
-    .btnLogin{
+    .btnRegister{
         float: center;
             background-color: $primaryColor;
             margin-top: 30px;
@@ -30,24 +30,17 @@
             color: #fff;
     }
 
-    .btnLogin:hover{
+    .btnRegister:hover{
         background-color: rgba(126, 152, 223, 0.7);
         border: 1px solid $primaryColor;
     }
 
-    .btnLoginGoogle{
+    .btnRegisterGoogle{
         float: center;
             color: $primaryColor;
             margin-top: 30px;
             border-radius: 20px;
             height: 50px;
-    }
-
-    .btnForgotPassword{
-        float: right;
-            color: $primaryColor;
-            margin-top: 30px;
-            font-weight: 400;
     }
 
     .btnPrimary{

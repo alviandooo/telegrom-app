@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
 
 function index() {
   return (
@@ -95,7 +96,9 @@ function index() {
           <Typography>
             Don’t have an account?
             <Button className={`${styles.btnPrimary}`}>
-              <b>Sign Up</b>
+              <Link href="/auth/register">
+                <b>Sign Up</b>
+              </Link>
             </Button>
           </Typography>
         </Container>
