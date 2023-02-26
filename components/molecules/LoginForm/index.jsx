@@ -2,6 +2,7 @@ import React from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import styles from "./styles.module.scss";
 import {
+  Alert,
   Button,
   Card,
   Container,
@@ -12,11 +13,21 @@ import {
 import Link from "next/link";
 
 import { auth } from "@/utils/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 function index() {
+  const [isError, setIsError] = React.useState(false);
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const [errorMsg, setErrorMsg] = React.useState("");
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const provider = new GoogleAuthProvider();
 
   const manualLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -25,11 +36,48 @@ function index() {
         const user = userCredential.user;
         console.log(user);
         // ...
+
+        setIsError(false);
+        setIsSuccess(true);
+        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode);
+
+        setIsSuccess(false);
+        setIsError(true);
+        setErrorMsg(errorCode);
+      });
+  };
+
+  const googleLogin = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        setIsError(false);
+        setIsSuccess(true);
+        console.log(user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        setIsSuccess(false);
+        setIsError(true);
+        setErrorMsg(errorCode);
       });
   };
 
@@ -72,6 +120,30 @@ function index() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
+        {isError && (
+          <React.Fragment>
+            <Alert
+              variant="outlined"
+              sx={{ marginTop: "20px", marginBottom: "-10px" }}
+              severity="error"
+            >
+              {errorMsg}
+            </Alert>
+          </React.Fragment>
+        )}
+
+        {isSuccess && (
+          <React.Fragment>
+            <Alert
+              variant="outlined"
+              sx={{ marginTop: "20px", marginBottom: "-10px" }}
+              severity="success"
+            >
+              Login is successfully!
+            </Alert>
+          </React.Fragment>
+        )}
+
         <Button className={`${styles.btnForgotPassword}`}>
           Forgot password?
         </Button>
@@ -106,6 +178,7 @@ function index() {
           fullWidth
           variant="outlined"
           className={`${styles.btnLoginGoogle}`}
+          onClick={googleLogin}
         >
           <GoogleIcon
             sx={{
