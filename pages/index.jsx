@@ -25,12 +25,22 @@ import EmoticonIcons from "@mui/icons-material/EmojiEmotions";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MicIcon from "@mui/icons-material/Mic";
 import SendIcon from "@mui/icons-material/Send";
+import { ref, onValue } from "firebase/database";
+import { database } from "@/database/firebase";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [isClicked, setIsClicked] = React.useState(false);
   const [selectedChat, setSelectedChat] = React.useState(null);
+  React.useEffect(() => {
+    const db = database;
+    const starCountRef = ref(db, "users");
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+    });
+  });
   return (
     <>
       <Head>
@@ -140,7 +150,7 @@ export default function Home() {
               >
                 {[...new Array(15)].map((item, key) => {
                   return (
-                    <>
+                    <React.Fragment>
                       <ListItem
                         key={key}
                         alignItems="flex-start"
@@ -177,7 +187,7 @@ export default function Home() {
                         />
                       </ListItem>
                       <Divider variant="fullWidth" component="li" />
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </List>
@@ -263,30 +273,36 @@ export default function Home() {
                   {/* left chat - sender */}
                   {[...new Array(8)].map((item, key) => {
                     return (
-                      <Box key={key} className="mb-2">
-                        <Grid container gap={2} sx={{ alignItems: "flex-end" }}>
-                          <Grid item>
-                            <Avatar
-                              alt="Alviando"
-                              src="/static/images/avatar/1.jpg"
-                            />
+                      <React.Fragment>
+                        <Box key={key} className="mb-2">
+                          <Grid
+                            container
+                            gap={2}
+                            sx={{ alignItems: "flex-end" }}
+                          >
+                            <Grid item>
+                              <Avatar
+                                alt="Alviando"
+                                src="/static/images/avatar/1.jpg"
+                              />
+                            </Grid>
+                            <Grid item md={3}>
+                              <Box
+                                sx={{
+                                  background: "#7E98DF",
+                                  borderRadius: "35px 35px 35px 10px",
+                                  padding: "20px",
+                                }}
+                              >
+                                <Typography sx={{ color: "#fff" }}>
+                                  Hi, son, how are you doing? Today, my father
+                                  and I went to buy a car, bought a cool car.
+                                </Typography>
+                              </Box>
+                            </Grid>
                           </Grid>
-                          <Grid item md={3}>
-                            <Box
-                              sx={{
-                                background: "#7E98DF",
-                                borderRadius: "35px 35px 35px 10px",
-                                padding: "20px",
-                              }}
-                            >
-                              <Typography sx={{ color: "#fff" }}>
-                                Hi, son, how are you doing? Today, my father and
-                                I went to buy a car, bought a cool car.
-                              </Typography>
-                            </Box>
-                          </Grid>
-                        </Grid>
-                      </Box>
+                        </Box>
+                      </React.Fragment>
                     );
                   })}
 
