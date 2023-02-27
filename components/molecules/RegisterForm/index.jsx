@@ -1,6 +1,7 @@
 import React from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import styles from "./styles.module.scss";
+import * as authReducer from "@/store/reducers/authSlice";
 import {
   Alert,
   Button,
@@ -18,6 +19,9 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "@/utils/firebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import * as useDb from "@/utils/database";
 
 function Index() {
   const [isError, setIsError] = React.useState(false);
@@ -26,19 +30,58 @@ function Index() {
 
   const [fullname, setFullname] = React.useState("");
   const [email, setEmail] = React.useState("");
+
   const [password, setPassword] = React.useState("");
 
+  const [userList, setUserList] = React.useState({});
+
   const provider = new GoogleAuthProvider();
+  const dispatch = useDispatch();
+  const checkAuth = useSelector((state) => state.auth);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (checkAuth.accessToken && checkAuth.accessToken !== null) {
+      router.replace("/");
+    }
+  }, []);
+
+  React.useEffect(() => {
+    useDb.getData("users", (snapshot) => {
+      const data = snapshot.val();
+      setUserList(data);
+    });
+  }, []);
 
   const manualRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
+        // store data to users table
+        const data = {
+          uid: user?.uid,
+          fullname: user?.displayName || fullname,
+          email: email,
+          emailVerified: user?.emailVerified || false,
+          photoURL:
+            user?.photoURL ||
+            "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
+        };
+
+        // store user data to redux
+        dispatch(
+          authReducer.setAuth({
+            user: {
+              uid: user.uid,
+            },
+            accessToken: user.accessToken,
+          })
+        );
 
         setIsError(false);
         setIsSuccess(true);
-        console.log(user);
+        postUser(data);
+        router.replace("/");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -46,6 +89,7 @@ function Index() {
         setIsSuccess(false);
         setIsError(true);
         setErrorMsg(errorCode);
+        console.log(error);
       });
   };
 
@@ -57,18 +101,38 @@ function Index() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+
+        // store data to users table
+        const data = {
+          uid: user?.uid,
+          fullname: user?.displayName || fullname,
+          email: user?.email,
+          emailVerified: user?.emailVerified || false,
+          photoURL:
+            user?.photoURL ||
+            "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
+        };
+
+        // store user data to redux
+        dispatch(
+          authReducer.setAuth({
+            user: {
+              uid: user?.uid,
+            },
+            accessToken: token,
+          })
+        );
         setIsError(false);
         setIsSuccess(true);
-        console.log(user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        postUser(data);
+        router.replace("/");
       })
       .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = error?.code;
+        const errorMessage = error?.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        const email = error?.customData?.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
@@ -76,7 +140,39 @@ function Index() {
         setIsSuccess(false);
         setIsError(true);
         setErrorMsg(errorCode);
+        console.log(error);
       });
+  };
+
+  const postUser = (params) => {
+    console.log(`params : ${params}`);
+    const {
+      uid,
+      fullname,
+      email,
+      emailVerified,
+      phoneNumber = null,
+      photoURL,
+    } = params;
+
+    const date = `${new Date().getFullYear()}/${
+      new Date().getMonth() + 1
+    }/${new Date().getDate()}`;
+
+    useDb.postData("users", {
+      ...userList,
+      [uid]: {
+        fullname,
+        email,
+        emailVerified,
+        phoneNumber,
+        photoURL,
+        timestamp: {
+          date: date,
+          time: new Date().getTime(),
+        },
+      },
+    });
   };
 
   return (

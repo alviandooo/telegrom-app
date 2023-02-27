@@ -1,6 +1,7 @@
 import React from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import styles from "./styles.module.scss";
+import * as authReducer from "@/store/reducers/authSlice";
 import {
   Alert,
   Button,
@@ -18,6 +19,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 function Index() {
   const [isError, setIsError] = React.useState(false);
@@ -28,23 +31,39 @@ function Index() {
   const [password, setPassword] = React.useState("");
 
   const provider = new GoogleAuthProvider();
+  const dispatch = useDispatch();
+  const checkAuth = useSelector((state) => state.auth);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (checkAuth.accessToken && checkAuth.accessToken !== null) {
+      router.replace("/");
+    }
+  }, []);
 
   const manualLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
+        // store user data to redux
+        dispatch(
+          authReducer.setAuth({
+            user: {
+              uid: user.uid,
+            },
+            accessToken: user.accessToken,
+          })
+        );
         // ...
 
         setIsError(false);
         setIsSuccess(true);
-        console.log(user);
+        router.replace("/");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode);
 
         setIsSuccess(false);
         setIsError(true);
@@ -62,9 +81,18 @@ function Index() {
         const user = result.user;
         setIsError(false);
         setIsSuccess(true);
-        console.log(user);
         // IdP data available using getAdditionalUserInfo(result)
+        // store user data to redux
+        dispatch(
+          authReducer.setAuth({
+            user: {
+              uid: user.uid,
+            },
+            accessToken: user.accessToken,
+          })
+        );
         // ...
+        router.replace("/");
       })
       .catch((error) => {
         // Handle Errors here.

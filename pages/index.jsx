@@ -26,6 +26,8 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MicIcon from "@mui/icons-material/Mic";
 import SendIcon from "@mui/icons-material/Send";
 import * as useDb from "@/utils/database";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +36,15 @@ export default function Home() {
   const [selectedChat, setSelectedChat] = React.useState(null);
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
+
+  const checkAuth = useSelector((state) => state.auth);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!checkAuth.accessToken || checkAuth.accessToken === null) {
+      router.replace("/auth/login");
+    }
+  }, []);
 
   React.useEffect(() => {
     useDb.getData("messages/user_1", (snapshot) => {
