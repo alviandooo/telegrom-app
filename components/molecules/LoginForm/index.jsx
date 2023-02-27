@@ -136,7 +136,11 @@ function Index() {
   };
 
   return (
-    <Card variant="outlined" className={`${styles.cardLogin}`}>
+    <Card
+      variant="outlined"
+      className={`${styles.cardLogin}`}
+      sx={{ borderRadius: "30px" }}
+    >
       <Container>
         <Typography variant="h1" className={`${styles.title}`}>
           LOGIN
