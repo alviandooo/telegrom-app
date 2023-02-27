@@ -1,0 +1,58 @@
+@import "../../../styles/global.module.scss";
+
+.cardLogin {
+    border-radius: 30px;
+    // height: 68vh;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+
+    .title{
+        text-align: center;
+            color: $primaryColor;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 25px;
+    }
+    
+    .subTitle{
+        margin-top: 30px;
+        font-size: 15px;
+        color: #232323;
+    }
+
+    .btnLogin{
+        float: center;
+            background-color: $primaryColor;
+            margin-top: 30px;
+            border-radius: 20px;
+            height: 50px;
+            color: #fff;
+    }
+
+    .btnLogin:hover{
+        background-color: rgba(126, 152, 223, 0.7);
+        border: 1px solid $primaryColor;
+    }
+
+    .btnLoginGoogle{
+        float: center;
+            color: $primaryColor;
+            margin-top: 30px;
+            border-radius: 20px;
+            height: 50px;
+    }
+
+    .btnForgotPassword{
+        float: right;
+            color: $primaryColor;
+            margin-top: 30px;
+            font-weight: 400;
+    }
+
+    .btnPrimary{
+        color: $primaryColor;
+    }
+
+}
+ 
