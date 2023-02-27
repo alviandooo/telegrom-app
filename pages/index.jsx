@@ -170,17 +170,17 @@ export default function Home() {
                   paddingBottom: "80px",
                 }}
               >
-                {[...new Array(15)].map((item, key) => {
+                {[...new Array(15)].map((item, keyItem) => {
                   return (
-                    <React.Fragment>
+                    <>
                       <ListItem
-                        key={key}
+                        key={keyItem}
                         alignItems="flex-start"
                         button
-                        selected={selectedChat === key}
+                        selected={selectedChat === keyItem}
                         onClick={() => {
                           setIsClicked(true);
-                          setSelectedChat(key);
+                          setSelectedChat(keyItem);
                         }}
                       >
                         <ListItemAvatar>
@@ -192,24 +192,24 @@ export default function Home() {
                         <ListItemText
                           primary="Brunch this weekend?"
                           secondary={
-                            <React.Fragment>
+                            <>
                               <Typography
                                 sx={{ display: "inline" }}
                                 component="span"
                                 variant="body2"
                                 color="text.primary"
                               >
-                                {key} -Ali Connors
+                                {keyItem} -Ali Connors
                               </Typography>
                               {
                                 " — I'll be in your neighborhood doing errands this…"
                               }
-                            </React.Fragment>
+                            </>
                           }
                         />
                       </ListItem>
                       <Divider variant="fullWidth" component="li" />
-                    </React.Fragment>
+                    </>
                   );
                 })}
               </List>
@@ -243,7 +243,7 @@ export default function Home() {
             )}
 
             {isClicked && (
-              <React.Fragment>
+              <>
                 {/* App Bar */}
                 <Box
                   className="shadow-sm"
@@ -293,10 +293,10 @@ export default function Home() {
                   }}
                 >
                   {/* left chat - sender */}
-                  {[...new Array(8)].map((item, key) => {
+                  {[...new Array(8)].map((item, keyItem) => {
                     return (
-                      <React.Fragment>
-                        <Box key={key} className="mb-2">
+                      <>
+                        <Box key={keyItem} className="mb-2">
                           <Grid
                             container
                             gap={2}
@@ -324,7 +324,7 @@ export default function Home() {
                             </Grid>
                           </Grid>
                         </Box>
-                      </React.Fragment>
+                      </>
                     );
                   })}
 
@@ -427,7 +427,7 @@ export default function Home() {
                     }}
                   />
                 </Box>
-              </React.Fragment>
+              </>
             )}
           </Grid>
         </Grid>

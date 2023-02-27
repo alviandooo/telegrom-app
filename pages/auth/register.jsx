@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React from "react";
-import RegisterForm from "@/components/molecules/RegisterForm";
+import RegisterForm from "@/components/molecules/RegisterForm/Index";
 import { Grid } from "@mui/material";
 
 function register() {

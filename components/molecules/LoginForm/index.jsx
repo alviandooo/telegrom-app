@@ -19,7 +19,7 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
-function index() {
+function Index() {
   const [isError, setIsError] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [errorMsg, setErrorMsg] = React.useState("");
@@ -208,4 +208,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;

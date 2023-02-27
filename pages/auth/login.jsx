@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import Head from "next/head";
 import React from "react";
-import LoginForm from "@/components/molecules/LoginForm";
+import LoginForm from "@/components/molecules/LoginForm/Index";
 
 function login() {
   return (
