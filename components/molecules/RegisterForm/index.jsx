@@ -154,7 +154,11 @@ function Index() {
   };
 
   return (
-    <Card variant="outlined" className={`${styles.cardRegister}`}>
+    <Card
+      variant="outlined"
+      className={`${styles.cardRegister}`}
+      sx={{ borderRadius: "30px" }}
+    >
       <Container>
         <Typography variant="h1" className={`${styles.title}`}>
           Register
