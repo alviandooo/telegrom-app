@@ -65,16 +65,6 @@ function Index() {
             "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
         };
 
-        // // store user data to redux
-        // dispatch(
-        //   authReducer.setAuth({
-        //     user: {
-        //       uid: user.uid,
-        //     },
-        //     accessToken: user.accessToken,
-        //   })
-        // );
-
         setIsError(false);
         setIsSuccess(true);
         postUser(data);

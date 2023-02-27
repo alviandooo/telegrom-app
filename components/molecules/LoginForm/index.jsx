@@ -21,6 +21,7 @@ import {
 } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import * as useDb from "@/utils/database";
 
 function Index() {
   const [isError, setIsError] = React.useState(false);
@@ -46,15 +47,35 @@ function Index() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // store user data to redux
-        dispatch(
-          authReducer.setAuth({
-            user: {
-              uid: user.uid,
-            },
-            accessToken: user.accessToken,
-          })
-        );
+
+        useDb.getData(`users/${user?.uid}`, (snapshot) => {
+          const users = snapshot.val();
+          if (users) {
+            // store user data to redux
+            dispatch(
+              authReducer.setAuth({
+                user: {
+                  uid: users?.uid,
+                  fullname: users?.fullname,
+                  email: users?.email,
+                  emailVerified: users?.emailVerified,
+                  photoURL: users?.photoURL,
+                },
+                accessToken: user.accessToken,
+              })
+            );
+          }
+        });
+
+        // // set status online
+        // useDb
+        //   .updateData(`users/${user?.uid}`, {
+        //     isOnline: true,
+        //   })
+        //   .then(() => {
+        //     console.log("data updated");
+        //   })
+        //   .catch((err) => console.log(err));
         // ...
 
         setIsError(false);
@@ -86,7 +107,12 @@ function Index() {
         dispatch(
           authReducer.setAuth({
             user: {
-              uid: user.uid,
+              uid: user?.uid,
+              fullname: user?.displayName || fullname,
+              email: user?.email,
+              emailVerified: user?.emailVerified || false,
+              photoURL: user?.photoURL,
+              accessToken: user.accessToken,
             },
             accessToken: user.accessToken,
           })

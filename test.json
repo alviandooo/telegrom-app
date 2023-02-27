@@ -1,0 +1,10 @@
+{
+    "messages":{
+        "datetime_message_send":{
+            "target_uid":"target_uid_1",
+            "sender_uid":"sender_uid_1",
+            "text":"lorem ipsum dolor aamet",
+            "timestamp":{}
+        }
+    }
+}
