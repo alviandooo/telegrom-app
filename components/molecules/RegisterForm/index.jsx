@@ -19,7 +19,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "@/utils/firebaseConfig";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import * as useDb from "@/utils/database";
 
@@ -30,13 +30,10 @@ function Index() {
 
   const [fullname, setFullname] = React.useState("");
   const [email, setEmail] = React.useState("");
-
   const [password, setPassword] = React.useState("");
-
   const [userList, setUserList] = React.useState({});
 
   const provider = new GoogleAuthProvider();
-  const dispatch = useDispatch();
   const checkAuth = useSelector((state) => state.auth);
   const router = useRouter();
 
@@ -68,20 +65,20 @@ function Index() {
             "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
         };
 
-        // store user data to redux
-        dispatch(
-          authReducer.setAuth({
-            user: {
-              uid: user.uid,
-            },
-            accessToken: user.accessToken,
-          })
-        );
+        // // store user data to redux
+        // dispatch(
+        //   authReducer.setAuth({
+        //     user: {
+        //       uid: user.uid,
+        //     },
+        //     accessToken: user.accessToken,
+        //   })
+        // );
 
         setIsError(false);
         setIsSuccess(true);
         postUser(data);
-        router.replace("/");
+        router.push("/auth/login");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -113,19 +110,10 @@ function Index() {
             "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
         };
 
-        // store user data to redux
-        dispatch(
-          authReducer.setAuth({
-            user: {
-              uid: user?.uid,
-            },
-            accessToken: token,
-          })
-        );
         setIsError(false);
         setIsSuccess(true);
         postUser(data);
-        router.replace("/");
+        router.push("/auth/login");
       })
       .catch((error) => {
         // Handle Errors here.
@@ -145,7 +133,6 @@ function Index() {
   };
 
   const postUser = (params) => {
-    console.log(`params : ${params}`);
     const {
       uid,
       fullname,
@@ -167,6 +154,7 @@ function Index() {
         emailVerified,
         phoneNumber,
         photoURL,
+        isOnline: false,
         timestamp: {
           date: date,
           time: new Date().getTime(),
