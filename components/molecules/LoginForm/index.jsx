@@ -55,11 +55,11 @@ function Index() {
             dispatch(
               authReducer.setAuth({
                 user: {
-                  uid: users?.uid,
-                  fullname: users?.fullname,
-                  email: users?.email,
-                  emailVerified: users?.emailVerified,
-                  photoURL: users?.photoURL,
+                  uid: user?.uid,
+                  fullname: user?.fullname,
+                  email: user?.email,
+                  emailVerified: user?.emailVerified,
+                  photoURL: user?.photoURL,
                 },
                 accessToken: user.accessToken,
               })
