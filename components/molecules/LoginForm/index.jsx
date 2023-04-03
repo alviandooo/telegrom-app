@@ -56,10 +56,10 @@ function Index() {
               authReducer.setAuth({
                 user: {
                   uid: user?.uid,
-                  fullname: user?.fullname,
-                  email: user?.email,
+                  fullname: user?.fullname || users?.fullname,
+                  email: user?.email || users?.email,
                   emailVerified: user?.emailVerified,
-                  photoURL: user?.photoURL,
+                  photoURL: user?.photoURL || users?.photoURL,
                 },
                 accessToken: user.accessToken,
               })
