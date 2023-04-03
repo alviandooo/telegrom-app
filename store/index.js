@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import authReducer from "@/store/reducers/authSlice";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
+// import AsyncStorage from "@react-native-community/async-storage";
 
 const customizedMiddleware = getDefaultMiddleware({
   serializableCheck: false,
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: storage,
   whitelist: ["auth"],
 };
 
